@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Aquí y Allá</string>
+    <string name="title_activity_main">Aquí y Allá</string>
+    <string name="package_name">com.aquiyalla.app</string>
+    <string name="custom_url_scheme">com.aquiyalla.app</string>
+</resources>

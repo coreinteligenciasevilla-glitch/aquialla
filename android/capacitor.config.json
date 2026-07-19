@@ -1,0 +1,6 @@
+{
+  "appId": "com.aquiyalla.app",
+  "appName": "Aquí y Allá",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
