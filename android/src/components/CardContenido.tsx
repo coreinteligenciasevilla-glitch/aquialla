@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CurationItem } from '../types';
 import { useApp } from '../context/AppContext';
 import { 
@@ -12,8 +12,11 @@ import {
   Sparkles,
   AlertTriangle,
   Heart,
-  Archive
+  Archive,
+  Play,
+  Pause
 } from 'lucide-react';
+import { VideoBackground } from './VideoBackground';
 
 interface CardContenidoProps {
   item: CurationItem;
@@ -24,6 +27,7 @@ export const CardContenido: React.FC<CardContenidoProps> = ({ item, onEditClick 
   const { deleteItem, likes, toggleLike, toggleArchiveItem, theme } = useApp();
   const isAqui = item.category === 'aqui';
   const isLiked = likes.includes(item.id);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   // Helper to select icon based on platform
   const getPlatformIcon = (type: string) => {
@@ -64,7 +68,7 @@ export const CardContenido: React.FC<CardContenidoProps> = ({ item, onEditClick 
   return (
     <div 
       id={`card-${item.id}`}
-      className={`snap-start scroll-mt-24 w-full h-[88%] flex-shrink-0 flex flex-col justify-between p-5 py-1.5 relative overflow-hidden transition-colors duration-500 ${
+      className={`snap-start scroll-mt-24 w-full h-[94%] flex-shrink-0 flex flex-col justify-between p-5 py-1.5 relative overflow-hidden transition-colors duration-500 ${
         theme === 'dark' ? 'bg-zinc-950' : 'bg-[#F3F4F6]'
       }`}
     >
@@ -73,6 +77,10 @@ export const CardContenido: React.FC<CardContenidoProps> = ({ item, onEditClick 
         onClick={() => onEditClick(item)}
         className={`w-full h-full rounded-[36px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.18)] relative flex flex-col justify-between p-6 transition-all duration-500 bg-gradient-to-tr cursor-pointer hover:shadow-[0_22px_45px_rgba(0,0,0,0.28)] hover:scale-[1.01] ${getCardBackground()}`}
       >
+        {item.url && (
+          <VideoBackground url={item.url} category={item.category} isPlaying={isPlaying} />
+        )}
+
         {/* Abstract cyber grid graphic overlay for extra texture depth */}
         <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none" />
         
@@ -99,6 +107,26 @@ export const CardContenido: React.FC<CardContenidoProps> = ({ item, onEditClick 
 
           {/* Action buttons: Like, Archive, and Delete */}
           <div className="flex items-center gap-1.5">
+            {/* Play/Pause Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPlaying(!isPlaying);
+              }}
+              className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 backdrop-blur-md cursor-pointer ${
+                isPlaying 
+                  ? 'bg-white/15 border-white/20 text-white/80 hover:bg-white/30 hover:text-white' 
+                  : 'bg-yellow-400 border-yellow-300 text-black shadow-[0_0_12px_rgba(250,204,21,0.5)]'
+              }`}
+              title={isPlaying ? "Pausar video de fondo" : "Reproducir video de fondo"}
+            >
+              {isPlaying ? (
+                <Pause className="w-3.5 h-3.5" />
+              ) : (
+                <Play className="w-3.5 h-3.5 fill-current" />
+              )}
+            </button>
+
             {/* Like / Bookmark button */}
             <button
               onClick={(e) => {
